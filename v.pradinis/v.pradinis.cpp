@@ -3,7 +3,7 @@
 #include <algorithm>
 
 using namespace std;
-const int N = 2;
+const int N = 5;
 
 struct Stud{
 string Vard;
@@ -11,7 +11,7 @@ string Pavard;
 int paz[10];
 int egz;
 float vid;
-double med;
+float med;
 };
 
 void Skaityti(Stud & A);
@@ -45,12 +45,12 @@ void Skaityti(Stud & A)
     for(int i = 0; i < n; i++)
     {
         cin >> A.paz[i];
-        while(A.paz[i] < 1 || A.paz[i] > 10)
+        while(A.paz[i] < 0 || A.paz[i] > 10)
         {cout << "Iveskite tinkama pazymi: "; cin >> A.paz[i];}
         s += A.paz[i];
     }
     cout << "Iveskite egzamino pazymi: "; cin >> A.egz;
-    while(A.egz < 1 || A.egz > 10)
+    while(A.egz < 0 || A.egz > 10)
         {cout << "Iveskite tinkama pazymi: "; cin >> A.egz;}
     A.vid = (float)s / n;
     A.med = Median(A,n);
