@@ -35,11 +35,12 @@ void Skaityti(Stud* A, int & n)
 {
     string vardas;
     n = 0;
-    int s = 0 , i = 0 , p;
+    int s = 0 , i , p;
     cout << "Iveskite studento varda: "; cin >> vardas;
-    while (vardas != "0" || vardas != "0"){
+    while (vardas != "0"){
         A[n].Vard = vardas;
         cout << "Iveskite studento pavarde: "; cin >> A[n].Pavard;
+        i = 0;
         cout << "Iveskite tuos pazymius. Jei daugiau pazymiu nera, iveskite skaiciu '11': "; cin >> p;
         while(p != 11){
             while(p < 0 || p > 11)
@@ -55,7 +56,6 @@ void Skaityti(Stud* A, int & n)
         A[n].vid = (float)s / i;
         A[n].med = Median(A[n],i);
         cout << "Iveskite studento varda. Jei daugiau studentu nera, iveskite skaiciu '0': "; cin >> vardas;
-        i++;
         n++;
     }
 }
