@@ -1,1 +1,71 @@
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
+
+using namespace std;
+
+struct Stud{
+string Vard;
+string Pavard;
+int paz[40];
+int egz;
+float vid;
+float med;
+};
+
+void Skaityti(Stud* A, int & n);
+double Median(Stud A, int n);
+
+int main()
+{
+    Stud A[30];
+    int N;
+    Skaityti(A, N);
+    cout << "Vardas  Pavarde         Galutinis(vid.) / Galutinis(med.)" << endl;
+    cout << "---------------------------------------------------------" << endl;
+    for(int j = 0; j < N; j++)
+    {
+        cout << A[j].Vard << '\t' << A[j].Pavard << '\t';
+        cout << fixed << setprecision(2) << 0.4 * A[j].vid + 0.6 * A[j].egz << '\t' << '\t' << '\t';
+        cout << fixed << setprecision(2) << 0.4 * A[j].vid + 0.6 * A[j].med << '\n';
+    }
+    return 0;
+}
+void Skaityti(Stud* A, int & n)
+{
+    string vardas;
+    n = 0;
+    int s = 0 , i = 0 , p;
+    cout << "Iveskite studento varda: "; cin >> vardas;
+    while (vardas != "0" || vardas != "0"){
+        A[n].Vard = vardas;
+        cout << "Iveskite studento pavarde: "; cin >> A[n].Pavard;
+        cout << "Iveskite tuos pazymius. Jei daugiau pazymiu nera, iveskite skaiciu '11': "; cin >> p;
+        while(p != 11){
+            while(p < 0 || p > 11)
+            {cout << "Iveskite tinkama pazymi: "; cin >> p;}
+            A[n].paz[i] = p;
+            s += A[n].paz[i];
+            i++;
+            cin >> p;
+        }
+        cout << "Iveskite egzamino pazymi: "; cin >> A[n].egz;
+        while(A[n].egz < 0 || A[n].egz > 10)
+            {cout << "Iveskite tinkama pazymi: "; cin >> A[n].egz;}
+        A[n].vid = (float)s / i;
+        A[n].med = Median(A[n],i);
+        cout << "Iveskite studento varda. Jei daugiau studentu nera, iveskite skaiciu '0': "; cin >> vardas;
+        i++;
+        n++;
+    }
+}
+double Median(Stud A, int n)
+{
+    double m;
+    sort(A.paz, A.paz + n);
+    if(n % 2 == 0)
+        m = (double)A.paz[n / 2];
+    m = (double)(A.paz[(n - 1) / 2] + A.paz[n / 2]) / 2.0;
+    return m;
+}
 
