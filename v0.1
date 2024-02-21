@@ -53,8 +53,14 @@ void Skaityti(Stud* A, int & n)
         cout << "Iveskite egzamino pazymi: "; cin >> A[n].egz;
         while(A[n].egz < 0 || A[n].egz > 10)
             {cout << "Iveskite tinkama pazymi: "; cin >> A[n].egz;}
-        A[n].vid = (float)s / i;
-        A[n].med = Median(A[n],i);
+        if(i != 0){    
+            A[n].vid = (float)s / i;
+            A[n].med = Median(A[n],i);
+            }
+        else{
+            A[n].vid = 0;
+            A[n].med = 0;
+            }
         cout << "Iveskite studento varda. Jei daugiau studentu nera, iveskite skaiciu '0': "; cin >> vardas;
         n++;
     }
