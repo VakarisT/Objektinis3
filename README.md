@@ -1,1 +1,1 @@
-Kol kas tik visiška nevertinama pradžia
+Jau iki V0.1 versijos viskas paruošta
