@@ -6,6 +6,9 @@
 #include <exception>
 #include <ctime>
 #include <string>
+#include <list>
+#include <deque>
+#include <numeric>
 #include <ctype.h>
 #include <locale.h> 
 #include <sstream>
