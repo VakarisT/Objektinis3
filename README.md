@@ -35,3 +35,4 @@ su listais:
 
 Štai bendrų atlikimų laikų lentelė:
 ![image](https://github.com/VakarisT/Objektinis-programavimas/assets/147090929/87aca2ca-ae76-439b-acd7-f2b92959f92c)
+                                             100000 Studentų
