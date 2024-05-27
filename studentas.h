@@ -52,8 +52,27 @@ public:
     void set_Hw(int hw) { this->hwRes_.push_back(hw); }
     void del_LastHw() { this->hwRes_.pop_back(); }
     void clear_Hw() { this->hwRes_.clear(); }
+    void clear_All()
+    {
+        this->name_.clear();
+        this->surname_.clear();
+        this->hwRes_.clear();
+        this->exRes_ = 0;
+        this->avg_ = 0.0;
+        this->med_ = 0.0;
+    }
     double Average();
     double Median();
+
+    Student(const Student &St_);
+    Student(Student &&St_) noexcept;
+    Student &operator=(const Student &St_);
+    Student &operator=(Student &&St_) noexcept;
+    friend std::istringstream& operator>>(std::istringstream& input, Student &St_);
+    friend std::istream& operator>>(std::istream& input, Student &St_);
+    friend std::ostream& operator<<(std::ostream& output, const Student &St_);
+    friend std::ofstream& operator<<(std::ofstream& output, const Student &St_);
+
 };
 
 bool compareName(const Student &a, const Student &b);
@@ -63,9 +82,9 @@ bool compareMed(const Student &a, const Student &b);
 int RandGrade();
 void CinError();
 void GenFile(int size, int hw);
-void ReadFile(std::vector<Student> &studVector);
-void Selection(std::vector<Student> &studVector, int choice, std::vector<Student> best, std::vector<Student> worst);
-void Results(std::vector<Student> studVector);
+void ReadFile(std::vector<Student>& studVector, int& size);
+void Selection(std::vector<Student>& studVector, int choice, std::vector<Student>& best, std::vector<Student>& worst);
+void Results(std::ofstream& fout, std::vector<Student>& A, std::string m);
 void ReadUser(std::vector<Student> &studVector);
 void GenUser(std::vector<Student> &studVector, int size, int hw);
 
