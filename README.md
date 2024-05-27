@@ -1,17 +1,9 @@
-V1.1 tyrimas.
+V1.2 tyrimas.
 
-Nežinau, ar gerai padariau naują repozitoriją, bet ji kaip ir yra.
+Manau, kad man pavyko realizuoti visus reikiamus "Rule of five" ir įvesties/išvesties operatorius.
 
-O pati programa atliekama naudojant pirmą V1.0 strategiją su vektoriais
+Čia panaudojau tik abiejų rūšių kopijavimo, abiejų rūšių perkėlimo ir išvesties operatorius.
 
-Taip išėjo, kad programa veikia kitaip, nei seniau buvusios, to pasekoje galbūt ja tapo sudėtingiau naudotis.
+Štai, ką išveda į ekraną:
+![image](https://github.com/VakarisT/NAUJA_REPOZITORIJA/assets/147090929/6de6895a-2a1a-4da8-a59f-a101a88df1c0)
 
-Todėl pateikiu naudojimo instrukciją:
-Mano programa pasileidžia per CMAKE.
-Dabar rūšiavimas ir išvedimas reikalauja atskiros komandos ir
-norint sugeneruoti failą reikia būtinai paspausti "4", nes dabar programa pati negeneruoja prašomo failo, 
-kurio anksčiau nebuvo (esant būtinybei galiu šią funkciją grąžinti).
-
-
-Tyrimo lentelė:
-![image](https://github.com/VakarisT/NAUJA_REPOZITORIJA/assets/147090929/99678e2b-18db-4c6d-840b-509a8ef3673e)
