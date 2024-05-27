@@ -1,26 +1,24 @@
 #include "studentas.h"
+#include "person.h"
 
-const std::vector<std::string> nameList{"Nojus", "Domas", "Arvydas", "Rokas", "Vytautas", "Aurimas", "Joris", "Ramunas", "Povilas", "Mindaugas"};
-const std::vector<std::string> surnameList{"Vaicekauskas", "Kateiva", "Kardauskas", "Zalionis", "Norkus", "Ozelis", "Stasiunas", "Oginskas", "Petrauskas", "Pakuckas"};
+const std::vector<std::string> nameList{ "Jonas","Amelija","Markas","Sofija","Benas","Liepa","Leonas","Liepa","Storas","Elija" };
+const std::vector<std::string> surnameList{ "Syna","Kaminskaite","Kazlauskas","Vanagaite","Petrauskas","Ratkeviciute","Gradauskas","Petreikyte","Apuole","Sadauskaite" };
 
-Student::Student() : hwRes_({0})
+Student::Student() : Person()
 {
-    name_ = "NeraVardo";
-    surname_ = "NeraPavardes";
+    hwRes_.clear();
     exRes_ = 0;
     avg_ = 0.0;
     med_ = 0.0;
-    std::cout << "Konstruktorius tuscias suveike" << std::endl;
 }
 
-Student::Student(std::string name, std::string surname) : hwRes_({0})
+Student::Student(const std::string name, const std::string surname) : Person(name, surname)
 {
-    name_ = name;
-    surname_ = surname;
+    hwRes_.clear();
     exRes_ = 0;
     avg_ = 0.0;
     med_ = 0.0;
-    std::cout << "Konstruktorius su vardu suveike" << std::endl;
+     std::cout << "Konstruktorius suveike" << std::endl;
 }
 
 Student::~Student()
@@ -29,30 +27,26 @@ Student::~Student()
     std::cout << "Destruktorius suveike" << std::endl;
 }
 
-Student::Student(const Student &St_)
+Student::Student(const Student& Student_) : Person(Student_.name_, Student_.surname_)
 {
-    name_ = St_.name_;
-    surname_ = St_.surname_;
-    hwRes_ = St_.hwRes_;
-    exRes_ = St_.exRes_;
-    avg_ = St_.avg_;
-    med_ = St_.med_;
+    hwRes_ = Student_.hwRes_;
+    exRes_ = Student_.exRes_;
+    avg_ = Student_.avg_;
+    med_ = Student_.med_;
     std::cout << "Kopijavimo konstruktorius suveike" << std::endl;
 }
 
-Student::Student(Student &&St_) noexcept
+Student::Student(Student &&Student_) noexcept : Person(std::move(Student_.name_), std::move(Student_.surname_))
 {
-    name_ = std::move(St_.name_);
-    surname_ = std::move(St_.surname_);
-    hwRes_ = std::move(St_.hwRes_);
-    exRes_ = std::move(St_.exRes_);
-    avg_ = std::move(St_.avg_);
-    med_ = std::move(St_.med_);
-    St_.clear_All();
+    hwRes_ = std::move(Student_.hwRes_);
+    exRes_ = std::move(Student_.exRes_);
+    avg_ = std::move(Student_.avg_);
+    med_ = std::move(Student_.med_);
+    Student_.clear_All();
     std::cout << "Perkelimo konstruktorius suveike" << std::endl;
 }
-
-Student &Student::operator=(const Student &St_)
+//-------------------------------------------------------------------------------------------------------------
+Student& Student::operator=(const Student& St_)
 {
     if (this != &St_)
     {
@@ -66,8 +60,7 @@ Student &Student::operator=(const Student &St_)
     std::cout << "Priskyrimo operatorius suveike" << std::endl;
     return *this;
 }
-
-Student &Student::operator=(Student &&St_) noexcept
+Student& Student::operator=(Student&& St_) noexcept
 {
     name_ = std::move(St_.name_);
     surname_ = std::move(St_.surname_);
@@ -80,7 +73,7 @@ Student &Student::operator=(Student &&St_) noexcept
     return *this;
 }
 
-std::istringstream &operator>>(std::istringstream &input, Student &St_)
+std::istringstream& operator>>(std::istringstream& input, Student& St_)
 {
     std::string name, surname;
     if (!(input >> name >> surname))
@@ -103,7 +96,7 @@ std::istringstream &operator>>(std::istringstream &input, Student &St_)
     return input;
 }
 
-std::istream &operator>>(std::istream &input, Student &St_)
+std::istream& operator>>(std::istream& input, Student& St_)
 {
     std::string name, surname;
     int hw, ex;
@@ -135,13 +128,13 @@ std::istream &operator>>(std::istream &input, Student &St_)
     return input;
 }
 
-std::ostream &operator<<(std::ostream &output, const Student &St_)
+std::ostream& operator<<(std::ostream& output, const Student& St_)
 {
     output << std::left << std::setw(15) << St_.get_Name() << std::setw(15) << St_.get_Surname() << std::setw(20) << St_.get_Avg() << std::setw(15) << St_.get_Med() << std::endl;
     return output;
 }
 
-std::ofstream &operator<<(std::ofstream &output, const Student &St_)
+std::ofstream& operator<<(std::ofstream& output, const Student& St_)
 {
     std::stringstream out;
     out << std::left << std::setw(15) << St_.get_Surname() << std::setw(15) << St_.get_Name() << std::setw(20) << St_.get_Avg() << std::setw(15) << St_.get_Med() << std::endl;
@@ -149,7 +142,6 @@ std::ofstream &operator<<(std::ofstream &output, const Student &St_)
     out.clear();
     return output;
 }
-
 double Student::Average()
 {
     if (hwRes_Size() > 0)
@@ -273,7 +265,7 @@ void ReadFile(std::vector<Student>& studVector, int& size)
         const std::chrono::duration<double> diff = end - start;
         std::cout << "Failo nuskaitymo laikas: " << diff.count() << " sekundes" << std::endl;
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -326,7 +318,7 @@ void Selection(std::vector<Student>& studVector, int choice, std::vector<Student
         const std::chrono::duration<double> diff = end - start;
         std::cout << "Studentu atrankos laikas: " << diff.count() << " sekundes" << std::endl;
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -348,7 +340,7 @@ void Results(std::ofstream& fout, std::vector<Student>& A, std::string m)
         const std::chrono::duration<double> diff = end - start;
         std::cout << m << " isvedimo laikas: " << diff.count() << " sekundes" << std::endl;
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -370,11 +362,18 @@ void ReadUser(std::vector<Student> &studVector)
 
 void GenUser(std::vector<Student> &studVector, int size, int hw)
 {
+    int v, p;
+    bool lytis;
     for (int i = 0; i < size; i++)
     {
         Student temp;
-        temp.set_Name(nameList[RandGrade() - 1]);
-        temp.set_Surname(surnameList[RandGrade() - 1]);
+        v = RandGrade() - 1;
+        lytis = v % 2;
+        p = RandGrade() - 1;
+        while (lytis != (p % 2))
+            p = RandGrade() - 1;
+        temp.set_Name(nameList[v]);
+        temp.set_Surname(surnameList[p]);
         temp.clear_Hw();
         for (int j = 0; j < hw; j++)
             temp.set_Hw(RandGrade());
