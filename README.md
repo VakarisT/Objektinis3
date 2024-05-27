@@ -1,4 +1,4 @@
-V1.2 tyrimas.
+V1.5 tyrimas.
 
 Manau, kad man pavyko realizuoti visus reikiamus "Rule of five" ir įvesties/išvesties operatorius.
 
