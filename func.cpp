@@ -1,28 +1,153 @@
 #include "studentas.h"
 
-const std::vector<std::string> nameList{ "Jonas","Amelija","Markas","Sofija","Benas","Liepa","Leonas","Liepa","Storas","Elija" };
-const std::vector<std::string> surnameList{ "Syna","Kaminskaite","Kazlauskas","Vanagaite","Petrauskas","Ratkeviciute","Gradauskas","Petreikyte","Apuole","Sadauskaite" };
+const std::vector<std::string> nameList{"Nojus", "Domas", "Arvydas", "Rokas", "Vytautas", "Aurimas", "Joris", "Ramunas", "Povilas", "Mindaugas"};
+const std::vector<std::string> surnameList{"Vaicekauskas", "Kateiva", "Kardauskas", "Zalionis", "Norkus", "Ozelis", "Stasiunas", "Oginskas", "Petrauskas", "Pakuckas"};
 
-Student::Student() : hwRes_({ 0 })
+Student::Student() : hwRes_({0})
 {
     name_ = "NeraVardo";
     surname_ = "NeraPavardes";
     exRes_ = 0;
     avg_ = 0.0;
     med_ = 0.0;
+    std::cout << "Konstruktorius tuscias suveike" << std::endl;
 }
 
-Student::Student(std::string name, std::string surname) : hwRes_({ 0 })
+Student::Student(std::string name, std::string surname) : hwRes_({0})
 {
     name_ = name;
     surname_ = surname;
     exRes_ = 0;
     avg_ = 0.0;
     med_ = 0.0;
+    std::cout << "Konstruktorius su vardu suveike" << std::endl;
 }
+
 Student::~Student()
 {
     hwRes_.clear();
+    std::cout << "Destruktorius suveike" << std::endl;
+}
+
+Student::Student(const Student &St_)
+{
+    name_ = St_.name_;
+    surname_ = St_.surname_;
+    hwRes_ = St_.hwRes_;
+    exRes_ = St_.exRes_;
+    avg_ = St_.avg_;
+    med_ = St_.med_;
+    std::cout << "Kopijavimo konstruktorius suveike" << std::endl;
+}
+
+Student::Student(Student &&St_) noexcept
+{
+    name_ = std::move(St_.name_);
+    surname_ = std::move(St_.surname_);
+    hwRes_ = std::move(St_.hwRes_);
+    exRes_ = std::move(St_.exRes_);
+    avg_ = std::move(St_.avg_);
+    med_ = std::move(St_.med_);
+    St_.clear_All();
+    std::cout << "Perkelimo konstruktorius suveike" << std::endl;
+}
+
+Student &Student::operator=(const Student &St_)
+{
+    if (this != &St_)
+    {
+        name_ = St_.name_;
+        surname_ = St_.surname_;
+        hwRes_ = St_.hwRes_;
+        exRes_ = St_.exRes_;
+        avg_ = St_.avg_;
+        med_ = St_.med_;
+    }
+    std::cout << "Priskyrimo operatorius suveike" << std::endl;
+    return *this;
+}
+
+Student &Student::operator=(Student &&St_) noexcept
+{
+    name_ = std::move(St_.name_);
+    surname_ = std::move(St_.surname_);
+    hwRes_ = std::move(St_.hwRes_);
+    exRes_ = std::move(St_.exRes_);
+    avg_ = std::move(St_.avg_);
+    med_ = std::move(St_.med_);
+    St_.clear_All();
+    std::cout << "Perkelimo operatorius suveike" << std::endl;
+    return *this;
+}
+
+std::istringstream &operator>>(std::istringstream &input, Student &St_)
+{
+    std::string name, surname;
+    if (!(input >> name >> surname))
+        throw std::runtime_error("Nepavyko nuskaityti vardo ir pavardes");
+    St_.set_Name(name);
+    St_.set_Surname(surname);
+    int hw;
+    St_.clear_Hw();
+    while (input >> hw)
+        St_.set_Hw(hw);
+    if (!St_.hwRes_Empty())
+    {
+        St_.set_ExRes(St_.hw_Last());
+        St_.del_LastHw();
+        St_.hw_Sort();
+        St_.set_Avg(St_.Average());
+        St_.set_Med(St_.Median());
+    }
+    std::cout << "As esu ivedimo is failo operatoriuje >>" << std::endl;
+    return input;
+}
+
+std::istream &operator>>(std::istream &input, Student &St_)
+{
+    std::string name, surname;
+    int hw, ex;
+    std::cout << "Vardas: ";
+    std::cin >> name;
+    std::cout << "Pavarde: ";
+    std::cin >> surname;
+    St_.set_Name(name);
+    St_.set_Surname(surname);
+    St_.clear_Hw();
+    while (true)
+    {
+        std::cout << "Namu darbu pazymys (\"-1\", kad uzbaigti): ";
+        std::cin >> hw;
+        if (std::cin.fail())
+            throw std::runtime_error("Klaidinga ivestis");
+        if (hw < 0)
+            break;
+        St_.set_Hw(hw);
+    }
+    std::cout << "Egzamino pazymys: ";
+    std::cin >> ex;
+    if (std::cin.fail())
+        throw std::runtime_error("Klaidinga ivestis");
+    St_.set_ExRes(ex);
+    St_.set_Avg(St_.Average());
+    St_.set_Med(St_.Median());
+    std::cout << "As esu ivedimo per konsole operatoriuje >>" << std::endl;
+    return input;
+}
+
+std::ostream &operator<<(std::ostream &output, const Student &St_)
+{
+    output << std::left << std::setw(15) << St_.get_Name() << std::setw(15) << St_.get_Surname() << std::setw(20) << St_.get_Avg() << std::setw(15) << St_.get_Med() << std::endl;
+    return output;
+}
+
+std::ofstream &operator<<(std::ofstream &output, const Student &St_)
+{
+    std::stringstream out;
+    out << std::left << std::setw(15) << St_.get_Surname() << std::setw(15) << St_.get_Name() << std::setw(20) << St_.get_Avg() << std::setw(15) << St_.get_Med() << std::endl;
+    output << out.str();
+    out.clear();
+    return output;
 }
 
 double Student::Average()
@@ -75,8 +200,8 @@ int RandGrade()
 
 void GenFile(int size, int hw)
 {
-    std::string fileName = "studentai" + std::to_string(size) + ".txt";
-    std::ofstream output(fileName);
+    std::string input = "Stud" + std::to_string(size) + ".txt";
+    std::ofstream output(input);
     std::stringstream out;
 
     out << std::left << std::setw(25) << "Vardas" << std::setw(25) << "Pavarde";
@@ -94,16 +219,15 @@ void GenFile(int size, int hw)
     output << out.str();
     out.clear();
     output.close();
-    std::cout << "Failas: " << fileName << " sugeneruotas" << std::endl;
+    std::cout << "Failas: " << input << " sugeneruotas sekmingai :)" << std::endl;
 }
 
-void ReadFile(std::vector<Student> &studVector)
+void ReadFile(std::vector<Student>& studVector, int& size)
 {
     try
     {
+        system("dir *.txt");
         std::cout << "Kiek studentu norite pamatyti (jei norite pabaigti, irasykite \"0\"): " << std::endl;
-        //system("dir *.txt");
-        int size;
         //std::string fileName;
         //std::cout << "Irasykite failo pavadinima (jei norite pabaigti, irasykite \"exit\"): ";
         std::cin >> size;
@@ -143,21 +267,23 @@ void ReadFile(std::vector<Student> &studVector)
         }
 
         input.close();
-        std::cout << "Failas sekmingai nuskaitytas :)" << std::endl;
+        //std::cout << "Failas sekmingai nuskaitytas :)" << std::endl;
         studVector.shrink_to_fit();
         const auto end = std::chrono::high_resolution_clock::now();
         const std::chrono::duration<double> diff = end - start;
         std::cout << "Failo nuskaitymo laikas: " << diff.count() << " sekundes" << std::endl;
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
 }
-void Selection(std::vector<Student>& studVector, int choice, std::vector<Student> best, std::vector<Student> worst)
+
+void Selection(std::vector<Student>& studVector, int choice, std::vector<Student>& best, std::vector<Student>& worst)
 {
     try
     {
+        const auto start = std::chrono::high_resolution_clock::now();
         switch (choice) {
         case 1:
             sort(studVector.begin(), studVector.end(),
@@ -196,63 +322,33 @@ void Selection(std::vector<Student>& studVector, int choice, std::vector<Student
             }
         }
         studVector.clear();
-        /*if (choice == 1)
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-            auto best = std::find_if(studVector.begin(), studVector.end(), [](const Student& stud)
-                                     { return stud.get_Avg() >= 5.0; });
-            //if (best != studVector.end())
-                //studVector.erase(best, studVector.end());
-            //else
-                //throw std::runtime_error("Nera studento su vidurkiu >= 5.0");
-            /*for (int i = 0; i < studVector.size(); i++)
-            {
-                //Stud st = A.at(i);
-                if (studVector.at(i).avg_ < 5.0) {
-                    best.push_back(studVector.at(i));
-                    //auto it = A.begin() + i;
-                }
-            }
-            while (studVector.front().avg_ < 5.0)
-                studVector.pop_front();
-            const auto end = std::chrono::high_resolution_clock::now();
-            const std::chrono::duration<double> diff = end - start;
-            std::cout << "Studentu atrankos laikas: " << diff.count() << " sekundes" << std::endl;
-        }
-        if (choice == 2)
-        {
-            const auto start = std::chrono::high_resolution_clock::now();
-            auto best = std::find_if(studVector.begin(), studVector.end(), [](const Student &stud)
-                                     { return stud.get_Med() >= 5.0; });
-            if (best != studVector.end())
-                studVector.erase(best, studVector.end());
-            else
-                throw std::runtime_error("Nera studento su mediana >= 5.0");
-            const auto end = std::chrono::high_resolution_clock::now();
-            const std::chrono::duration<double> diff = end - start;
-            std::cout << "Studentu atrankos laikas: " << diff.count() << " sekundes" << std::endl;
-        }*/
+        const auto end = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double> diff = end - start;
+        std::cout << "Studentu atrankos laikas: " << diff.count() << " sekundes" << std::endl;
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
 }
 
-void Results(std::vector<Student> stud)
+void Results(std::ofstream& fout, std::vector<Student>& A, std::string m)
 {
     try
     {
-        //std::ofstream fout("")
-        if (stud.size() < 1)
+        const auto start = std::chrono::high_resolution_clock::now();
+        if (A.size() < 1)
             throw std::runtime_error("Nera duomenu vektoriaus masyve!");
-        std::cout << std::left << std::setw(15) << "Pavarde" << std::setw(15) << "Vardas" << std::setw(20) << "Galutinis (Vid.)" << std::setw(15) << "Galutinis (Med.)" << std::endl;
-        std::cout << "------------------------------------------------------------------" << std::endl;
-        std::cout << std::fixed << std::setprecision(2);
-        for (const auto &i : stud)
-            std::cout << std::left << std::setw(15) << i.get_Name() << std::setw(15) << i.get_Surname() << std::setw(20) << i.get_Avg() << std::setw(15) << i.get_Med() << std::endl;
+        fout << std::left << std::setw(15) << "Pavarde" << std::setw(15) << "Vardas" << std::setw(20) << "Galutinis (Vid.)" << std::setw(15) << "Galutinis (Med.)" << std::endl;
+        fout << "------------------------------------------------------------------" << std::endl;
+        fout << std::fixed << std::setprecision(2);
+        for (const auto& i : A)
+            fout << std::left << std::setw(15) << i.get_Name() << std::setw(15) << i.get_Surname() << std::setw(20) << i.get_Avg() << std::setw(15) << i.get_Med() << std::endl;
+        const auto end = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double> diff = end - start;
+        std::cout << m << " isvedimo laikas: " << diff.count() << " sekundes" << std::endl;
     }
-    catch (const std::exception &e)
+    catch (const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -263,39 +359,8 @@ void ReadUser(std::vector<Student> &studVector)
     try
     {
         Student temp;
-        std::string name, surname;
-        int hw, ex;
-
-        while (true)
-        {
-            std::cout << "Vardas (jei norite uzbaigti, spauskite \"exit\"): ";
-            std::cin >> name;
-            if (name == "exit")
-                break;
-            std::cout << "Pavarde: ";
-            std::cin >> surname;
-            temp.set_Name(name);
-            temp.set_Surname(surname);
-            temp.clear_Hw();
-            while (true)
-            {
-                std::cout << "Namu darbu pazymys (jei norite uzbaigti, spauskite \"-1\"): ";
-                std::cin >> hw;
-                if (std::cin.fail())
-                    throw std::runtime_error("Klaidinga ivestis");
-                if (hw < 0)
-                    break;
-                temp.set_Hw(hw);
-            }
-            std::cout << "Egzamino pazymys: ";
-            std::cin >> ex;
-            if (std::cin.fail())
-                throw std::runtime_error("Klaidinga ivestis");
-            temp.set_ExRes(ex);
-            temp.set_Avg(temp.Average());
-            temp.set_Med(temp.Median());
-            studVector.push_back(temp);
-        }
+        std::cin >> temp;
+        studVector.push_back(temp);
     }
     catch (const std::exception &e)
     {
@@ -305,18 +370,11 @@ void ReadUser(std::vector<Student> &studVector)
 
 void GenUser(std::vector<Student> &studVector, int size, int hw)
 {
-    int v, p;
-    bool lytis;
     for (int i = 0; i < size; i++)
     {
         Student temp;
-        v = RandGrade() - 1;
-        lytis = v % 2;
-        p = RandGrade() - 1;
-        while(lytis != (p % 2))
-            p = RandGrade() - 1;
-        temp.set_Name(nameList[v]);
-        temp.set_Surname(surnameList[p]);
+        temp.set_Name(nameList[RandGrade() - 1]);
+        temp.set_Surname(surnameList[RandGrade() - 1]);
         temp.clear_Hw();
         for (int j = 0; j < hw; j++)
             temp.set_Hw(RandGrade());
