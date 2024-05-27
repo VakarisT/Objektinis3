@@ -18,21 +18,18 @@
 #include <ctype.h>
 #include <locale.h> 
 #include <tchar.h>
+#include "person.h"
 
-class Student
+class Student : public Person
 {
 private:
-    std::string name_;
-    std::string surname_;
     double exRes_;
     std::vector<int> hwRes_;
     double avg_, med_;
 
 public:
     Student();
-    Student(std::string name, std::string surname);
-    inline std::string get_Name() const { return name_; }
-    inline std::string get_Surname() const { return surname_; }
+    Student(const std::string name, const std::string surname);
     std::vector<int> get_HwRes() const { return hwRes_; }
     double get_exRes() const { return exRes_; }
     double get_Avg() const { return avg_; }
@@ -44,8 +41,6 @@ public:
     int hw_Last() { return hwRes_.back(); }
     ~Student();
 
-    void set_Name(std::string name) { this->name_ = name; }
-    void set_Surname(std::string surname) { this->surname_ = surname; }
     void set_ExRes(double exRes) { this->exRes_ = exRes; }
     void set_Avg(double avg) { this->avg_ = avg; }
     void set_Med(double med) { this->med_ = med; }
@@ -64,28 +59,29 @@ public:
     double Average();
     double Median();
 
-    Student(const Student &St_);
-    Student(Student &&St_) noexcept;
-    Student &operator=(const Student &St_);
-    Student &operator=(Student &&St_) noexcept;
-    friend std::istringstream& operator>>(std::istringstream& input, Student &St_);
-    friend std::istream& operator>>(std::istream& input, Student &St_);
-    friend std::ostream& operator<<(std::ostream& output, const Student &St_);
-    friend std::ofstream& operator<<(std::ofstream& output, const Student &St_);
+    Student(const Student& Student_);
+    Student(Student&& Student_) noexcept;
+    Student& operator=(const Student& Student_);
+    Student& operator=(Student&& Student_) noexcept;
+    friend std::istringstream& operator>>(std::istringstream& input, Student& Student_);
+    friend std::istream& operator>>(std::istream& input, Student& Student_);
+    friend std::ostream& operator<<(std::ostream& output, const Student& Student_);
+    friend std::ofstream& operator<<(std::ofstream& output, const Student& Student_);
 
+    virtual void whoAmI() { std::cout << "Studento klase" << std::endl; }
 };
 
-bool compareName(const Student &a, const Student &b);
-bool compareSurname(const Student &a, const Student &b);
-bool compareAvg(const Student &a, const Student &b);
-bool compareMed(const Student &a, const Student &b);
+bool compareName(const Student& a, const Student& b);
+bool compareSurname(const Student& a, const Student& b);
+bool compareAvg(const Student& a, const Student& b);
+bool compareMed(const Student& a, const Student& b);
 int RandGrade();
 void CinError();
 void GenFile(int size, int hw);
 void ReadFile(std::vector<Student>& studVector, int& size);
 void Selection(std::vector<Student>& studVector, int choice, std::vector<Student>& best, std::vector<Student>& worst);
 void Results(std::ofstream& fout, std::vector<Student>& A, std::string m);
-void ReadUser(std::vector<Student> &studVector);
-void GenUser(std::vector<Student> &studVector, int size, int hw);
+void ReadUser(std::vector<Student>& studVector);
+void GenUser(std::vector<Student>& studVector, int size, int hw);
 
 #endif
