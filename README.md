@@ -20,6 +20,7 @@ MyVector reiksmes: 1 2 3
 
 ### capacity()
 Nurodo dabartinę konteinerio talpą.
+
 ```cpp
 MyVector<int> vec;
 vec.push_back(1);
