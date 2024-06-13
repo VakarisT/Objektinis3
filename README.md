@@ -17,7 +17,7 @@ std::cout << '\n';
 Rezultatas
 ```cpp
 MyVector reiksmes: 1 2 3
-
+```
 ### capacity()
 Nurodo dabartinę konteinerio talpą.
 
