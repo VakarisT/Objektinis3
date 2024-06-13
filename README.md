@@ -76,9 +76,9 @@ Rezultatas
 Ar MyVector tuscias? Taip
 ```
 ## Testavimai
-- Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz
-- RAM(16,0 GB)
-- Samsung SSD 970 EVO Plus 500GB
+- Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz
+- RAM(8,0 GB)
+- KBG40ZNV512G KIOXIA
 ### Konteinerių užpildymas (v3.0)
 | Elementu skaicius | std::vector laikas | MyVector laikas | std::vector atminties perskirstymai | MyVector atminties perskirstymai |
 |-------------------|--------------------|-----------------|-------------------------------------|----------------------------------|
